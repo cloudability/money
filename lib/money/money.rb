@@ -11,6 +11,11 @@ class Money
   include Formatting
   include Parsing
 
+  # The value of the money in cents, with sub-cent accuracy.
+  #
+  # @return [BigDecimal]
+  attr_reader :cents_precise
+
   # The value of the money in cents.
   #
   # @return [Integer]
@@ -147,7 +152,7 @@ class Money
   # @see Money.new
   #
   def self.new_with_dollars(amount, currency = Money.default_currency, bank = Money.default_bank)
-    money = from_numeric(amount, currency)
+    money = from_non_string(amount, currency)
     # Hack! You can't change a bank
     money.instance_variable_set("@bank", bank)
     money
@@ -191,6 +196,11 @@ class Money
   # @see Money.new_with_dollars
   #
   def initialize(cents, currency = Money.default_currency, bank = Money.default_bank)
+    if(cents.respond_to?(:to_d))
+      @cents_precise = cents.to_d
+    else
+      @cents_precise = BigDecimal.new(cents.to_s)
+    end
     @cents = cents.round.to_i
     @currency = Currency.wrap(currency)
     @bank = bank
@@ -242,7 +252,7 @@ class Money
   # @example
   #   Money.new(100).hash #=> 908351
   def hash
-    [cents.hash, currency.hash].hash
+    [cents_precise.hash, currency.hash].hash
   end
 
   # Uses +Currency#symbol+. If +nil+ is returned, defaults to "¤".
@@ -259,10 +269,10 @@ class Money
   #
   # @return [String]
   def inspect
-    "#<Money cents:#{cents} currency:#{currency}>"
+    "#<Money cents:#{cents_precise} currency:#{currency}>"
   end
 
-  # Returns the amount of money as a string.
+  # Returns the amount of money as a string.  Does not return full precision!
   #
   # @return [String]
   #
@@ -286,7 +296,7 @@ class Money
   # @example
   #   Money.us_dollar(100).to_d => BigDecimal.new("1.0")
   def to_d
-    BigDecimal.new(cents.to_s) / BigDecimal.new(currency.subunit_to_unit.to_s)
+    cents_precise / BigDecimal.new(currency.subunit_to_unit.to_s)
   end
 
   # Return the amount of money as a float. Floating points cannot guarantee
@@ -394,6 +404,7 @@ class Money
   end
 
   # Split money amongst parties evenly without loosing pennies.
+  # WARNING: Loses sub-penny precision.
   #
   # @param [2] number of parties.
   #

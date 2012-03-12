@@ -371,13 +371,13 @@ describe Money, "formatting" do
 
     it "brute forces :subunit_to_unit = 10" do
       ("0.0".."9.9").each do |amt|
-        amt.to_money("VND").format(:symbol => false).should == amt.to_s.gsub(/\./, ",")
+        amt.sub('.', ',').to_money("VND").format(:symbol => false).should == amt.to_s.gsub(/\./, ",")
       end
       ("-0.1".."-9.9").each do |amt|
-        amt.to_money("VND").format(:symbol => false).should == amt.to_s.gsub(/\./, ",")
+        amt.sub('.', ',').to_money("VND").format(:symbol => false).should == amt.to_s.gsub(/\./, ",")
       end
-      "1000.0".to_money("VND").format(:symbol => false).should == "1.000,0"
-      "-1000.0".to_money("VND").format(:symbol => false).should == "-1.000,0"
+      "1000,0".to_money("VND").format(:symbol => false).should == "1.000,0"
+      "-1000,0".to_money("VND").format(:symbol => false).should == "-1.000,0"
     end
 
     it "brute forces :subunit_to_unit = 100" do

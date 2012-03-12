@@ -38,12 +38,17 @@ describe Money, "core extensions" do
 
   describe String do
     describe "#to_money" do
-
+      # NOTE: The following variants were supported by the Money gem
+      # NOTE: previously, but I'm not in favor of trying to magically support
+      # NOTE: bad input at the cost of not being able to support good input
+      # NOTE: correctly.
+      #   "100,37"          => Money.new(100_37)            ,
+      #   "100.37 EUR"      => Money.new(100_37, "EUR")     ,
+      #   "EUR 100.37"      => Money.new(100_37, "EUR")     ,
       STRING_TO_MONEY = {
         "20.15"           => Money.new(20_15)             ,
         "100"             => Money.new(100_00)            ,
         "100.37"          => Money.new(100_37)            ,
-        "100,37"          => Money.new(100_37)            ,
         "100 000"         => Money.new(100_000_00)        ,
         "100,000.00"      => Money.new(100_000_00)        ,
         "1,000"           => Money.new(1_000_00)          ,
@@ -62,7 +67,6 @@ describe Money, "core extensions" do
         "100 USD"         => Money.new(100_00, "USD")     ,
         "-100 USD"        => Money.new(-100_00, "USD")    ,
         "100 EUR"         => Money.new(100_00, "EUR")     ,
-        "100.37 EUR"      => Money.new(100_37, "EUR")     ,
         "100,37 EUR"      => Money.new(100_37, "EUR")     ,
         "100,000.00 USD"  => Money.new(100_000_00, "USD") ,
         "100.000,00 EUR"  => Money.new(100_000_00, "EUR") ,
@@ -74,7 +78,6 @@ describe Money, "core extensions" do
 
         "USD 100"         => Money.new(100_00, "USD")     ,
         "EUR 100"         => Money.new(100_00, "EUR")     ,
-        "EUR 100.37"      => Money.new(100_37, "EUR")     ,
         "CAD -100.37"     => Money.new(-100_37, "CAD")    ,
         "EUR 100,37"      => Money.new(100_37, "EUR")     ,
         "EUR -100,37"     => Money.new(-100_37, "EUR")    ,
@@ -106,7 +109,7 @@ describe Money, "core extensions" do
 
       it "accepts optional currency" do
         "10.10".to_money('USD').should == Money.new(1010, 'USD')
-        "10.10".to_money('EUR').should == Money.new(1010, 'EUR')
+        "10,10".to_money('EUR').should == Money.new(1010, 'EUR')
         "10.10 USD".to_money('USD').should == Money.new(1010, 'USD')
       end
 
