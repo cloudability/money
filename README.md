@@ -1,6 +1,4 @@
-# RubyMoney - Money
-
-[![Build Status](http://travis-ci.org/RubyMoney/money.png)](http://travis-ci.org/RubyMoney/money)
+# Cloudability - Money
 
 ## Introduction
 
@@ -22,9 +20,7 @@ This library aids one in handling money and different currencies.
 
 ### Resources
 
-- [Website](http://money.rubyforge.org)
-- [API Documentation](http://money.rubyforge.org)
-- [Git Repository](http://github.com/RubyMoney/money)
+- [Git Repository](http://github.com/MrJoy/money)
 
 ### Note
 
@@ -38,7 +34,7 @@ Install stable releases with the following command:
 
 The development version (hosted on Github) can be installed with:
 
-    git clone git://github.com/RubyMoney/money.git
+    git clone git://github.com/MrJoy/money.git
     cd money
     rake install
 
