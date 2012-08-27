@@ -8,7 +8,7 @@ class Money
     # @example
     #    - Money.new(100) #=> #<Money @cents=-100>
     def -@
-      (-to_d).to_money(currency)
+      Money.new(-cents, currency)
     end
 
 
@@ -26,7 +26,7 @@ class Money
     def ==(other_money)
       if other_money.respond_to?(:to_money)
         other_money = other_money.to_money
-        to_d == other_money.to_d && self.currency == other_money.currency
+        cents == other_money.cents && self.currency == other_money.currency
       else
         false
       end
@@ -47,9 +47,9 @@ class Money
       if other_money.respond_to?(:to_money)
         other_money = other_money.to_money
         if self.currency == other_money.currency
-          to_d <=> other_money.to_d
+          cents <=> other_money.cents
         else
-          to_d <=> other_money.exchange_to(currency).to_d
+          cents <=> other_money.exchange_to(currency).cents
         end
       else
         raise ArgumentError, "Comparison of #{self.class} with #{other_money.inspect} failed"
@@ -94,9 +94,9 @@ class Money
     #   Money.new(100) + Money.new(100) #=> #<Money @cents=200>
     def +(other_money)
       if currency == other_money.currency
-        (to_d + other_money.to_d).to_money(other_money.currency)
+        Money.new(cents + other_money.cents, other_money.currency)
       else
-        (to_d + other_money.exchange_to(currency).to_d).to_money(currency)
+        Money.new(cents + other_money.exchange_to(currency).cents, currency)
       end
     end
 
@@ -113,9 +113,9 @@ class Money
     #   Money.new(100) - Money.new(99) #=> #<Money @cents=1>
     def -(other_money)
       if currency == other_money.currency
-        (to_d - other_money.to_d).to_money(other_money.currency)
+        Money.new(cents - other_money.cents, other_money.currency)
       else
-        (to_d - other_money.exchange_to(currency).to_d).to_money(currency)
+        Money.new(cents - other_money.exchange_to(currency).cents, currency)
       end
     end
 
