@@ -1,7 +1,6 @@
 require 'money/bank/base'
-
-autoload :JSON, 'json'
-autoload :YAML, 'yaml'
+require 'json'
+require 'yaml'
 
 class Money
   module Bank

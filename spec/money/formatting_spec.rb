@@ -5,6 +5,7 @@ require "spec_helper"
 describe Money, "formatting" do
 
   BAR = '{ "priority": 1, "iso_code": "BAR", "iso_numeric": "840", "name": "Dollar with 4 decimal places", "symbol": "$", "subunit": "Cent", "subunit_to_unit": 10000, "symbol_first": true, "html_entity": "$", "decimal_mark": ".", "thousands_separator": "," }'
+  INDIAN_BAR = '{ "priority": 1, "iso_code": "INDIAN_BAR", "iso_numeric": "840", "name": "Dollar with 4 decimal places", "symbol": "$", "subunit": "Cent", "subunit_to_unit": 10000, "symbol_first": true, "html_entity": "$", "decimal_mark": ".", "thousands_separator": ",", "south_asian_number_formatting": true}'
   EU4 = '{ "priority": 1, "iso_code": "EU4", "iso_numeric": "841", "name": "Euro with 4 decimal places", "symbol": "€", "subunit": "Cent", "subunit_to_unit": 10000, "symbol_first": true, "html_entity": "€", "decimal_mark": ",", "thousands_separator": "." }'
 
   context "without i18n" do
@@ -132,7 +133,7 @@ describe Money, "formatting" do
       one_thousand["BRL"].should == "R$ 1.000,00"
 
       # Other
-      one_thousand["SEK"].should == "kr1,000.00"
+      one_thousand["SEK"].should == "1.000,00 kr"
       one_thousand["GHC"].should == "₵1,000.00"
     end
 
@@ -231,7 +232,7 @@ describe Money, "formatting" do
         one["BRL"].should == "R$ 1,00"
 
         # Other
-        one["SEK"].should == "kr1.00"
+        one["SEK"].should == "1,00 kr"
         one["GHC"].should == "₵1.00"
       end
 
@@ -244,7 +245,7 @@ describe Money, "formatting" do
       specify "(:symbol => some non-Boolean value that evaluates to true) returns symbol based on the given currency code" do
         Money.new(100, "GBP").format(:symbol => true).should == "£1.00"
         Money.new(100, "EUR").format(:symbol => true).should == "€1,00"
-        Money.new(100, "SEK").format(:symbol => true).should == "kr1.00"
+        Money.new(100, "SEK").format(:symbol => true).should == "1,00 kr"
       end
 
       specify "(:symbol => "", nil or false) returns the amount without a symbol" do
@@ -279,6 +280,18 @@ describe Money, "formatting" do
     describe ":separator option" do
       specify "(:separator => a separator string) works as documented" do
         Money.us_dollar(100).format(:separator  => ",").should == "$1,00"
+      end
+    end
+
+    describe ":south_asian_number_formatting delimiter" do
+      before(:each) do
+        Money::Currency.register(JSON.parse(INDIAN_BAR, :symbolize_names => true))
+      end
+
+      specify "(:south_asian_number_formatting => true) works as documented" do
+        Money.new(10000000, 'INR').format(:south_asian_number_formatting => true, :symbol => false).should == "1,00,000.00"
+        Money.new(1000000000, 'INDIAN_BAR').format(:south_asian_number_formatting => true, :symbol => false).should == "1,00,000.0000"
+        Money.new(10000000).format(:south_asian_number_formatting => true).should == "$1,00,000.00"
       end
     end
 

@@ -1,6 +1,6 @@
 # Changelog
 
-## 5.1.0
+## master
 
 NOTICE: This change breaks the magic hand-waving about commas-vs-periods as
 thousands separators vs. decimal separators.  Now, the currency's configuration
@@ -9,7 +9,16 @@ high-precision values.
 
 - Add support for retaining high-precision versions of money values.
 - Reformat changelog to actually be Markdown.
+- Update Turkmenistan manat from TMM to TMT currency (GH-181). [Thanks @Exoth]
+- Moved ZWD Zimbabwean dollars to currency_bc.json, also added there ZWL, ZWN, and ZWR Zimbabwean dollars (GH-184).
 
+## 5.1.0
+
+- Switch to multi_json gem (GH-170)
+- Fix "warning: ambiguous first argument..." (GH-166)
+- Update dependencies to latest and greatest (GH-172)
+- TravisBot is now watching Pull Request!!! (GH-171)
+- Minor code cleaning
 
 ## 5.0.0
 
