@@ -30,7 +30,7 @@ describe Money, "core extensions" do
       end
 
       specify "GH-15" do
-        amount = 555.55.to_money
+        amount = BigDecimal.new("555.55").to_money
         amount.should == Money.new(55555)
       end
     end
