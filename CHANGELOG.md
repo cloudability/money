@@ -30,6 +30,8 @@ high-precision values.
 - Added Money#positive? and Money#negative? methods (GH-157)
 - Fix format function output for custom currencies (GH-156)
 - Fix parsing of strings with 3 decimal digits (GH-158)
+- Updated development dependencies
+- Said goodbye to RubyForge
 
 
 ## 4.0.2
