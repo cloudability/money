@@ -43,8 +43,8 @@ describe Money, "parsing" do
         end
         it "parses formatted inputs with the currency passed as a symbol but ignores the symbol" do
           Money.parse("$5.95").should == Money.new(595, 'USD')
-          Money.parse("€5,95").should == Money.new(59500, 'USD')
-          Money.parse(" €5,95 ").should == Money.new(59500, 'USD')
+          Money.parse("€5,95").should == Money.new(595, 'USD')
+          Money.parse(" €5,95 ").should == Money.new(595, 'USD')
           Money.parse("£9.99").should == Money.new(999, 'USD')
 
         end
