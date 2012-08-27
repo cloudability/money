@@ -5,7 +5,7 @@ Gem::Specification.new do |s|
   s.platform    = Gem::Platform::RUBY
   s.authors     = ["Jon Frisby", "Tobias Luetke", "Hongli Lai", "Jeremy McNevin",
                    "Shane Emmons", "Simone Carletti"]
-  s.email       = ["jon@cloudability.com"]
+  s.email       = ["semmons99+RubyMoney@gmail.com", "jon@cloudability.com"]
   s.homepage    = "https://github.com/MrJoy/money"
   s.summary     = "Money and currency exchange support library."
   s.description = "This library aids one in handling money and different currencies."

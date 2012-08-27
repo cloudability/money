@@ -13,6 +13,8 @@ high-precision values.
 
 ## 5.0.0
 
+- Minor bugfix - incorrect use of character range resulted in 
+  botched results for Money::Parsing#extract_cents (GH-162)
 - Money::Currency::TABLE removed. Use Money::Currency.register to add
   additional currencies (GH-143)
 - Fix rounding error in Numeric.to_money (GH-145)
@@ -27,6 +29,7 @@ high-precision values.
   object open (GH-154)
 - Added Money#positive? and Money#negative? methods (GH-157)
 - Fix format function output for custom currencies (GH-156)
+- Fix parsing of strings with 3 decimal digits (GH-158)
 
 
 ## 4.0.2
