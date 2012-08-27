@@ -175,77 +175,77 @@ describe Money, "parsing" do
     end
   end
 
-  describe ".from_non_string (Fixnum)" do
+  describe ".from_numeric (Fixnum)" do
     it "converts given amount to cents" do
-      Money.from_non_string(1).should == Money.new(1_00)
-      Money.from_non_string(1).should == Money.new(1_00, "USD")
-      Money.from_non_string(1, "EUR").should == Money.new(1_00, "EUR")
+      Money.from_numeric(1).should == Money.new(1_00)
+      Money.from_numeric(1).should == Money.new(1_00, "USD")
+      Money.from_numeric(1, "EUR").should == Money.new(1_00, "EUR")
     end
 
     it "should respect :subunit_to_unit currency property" do
-      Money.from_non_string(1, "USD").should == Money.new(1_00,  "USD")
-      Money.from_non_string(1, "TND").should == Money.new(1_000, "TND")
-      Money.from_non_string(1, "CLP").should == Money.new(1,     "CLP")
+      Money.from_numeric(1, "USD").should == Money.new(1_00,  "USD")
+      Money.from_numeric(1, "TND").should == Money.new(1_000, "TND")
+      Money.from_numeric(1, "CLP").should == Money.new(1,     "CLP")
     end
 
     it "accepts a currency options" do
-      m = Money.from_non_string(1)
+      m = Money.from_numeric(1)
       m.currency.should == Money.default_currency
 
-      m = Money.from_non_string(1, Money::Currency.wrap("EUR"))
+      m = Money.from_numeric(1, Money::Currency.wrap("EUR"))
       m.currency.should == Money::Currency.wrap("EUR")
 
-      m = Money.from_non_string(1, "EUR")
+      m = Money.from_numeric(1, "EUR")
       m.currency.should == Money::Currency.wrap("EUR")
     end
   end
 
-  describe ".from_non_string (Float)" do
+  describe ".from_numeric (Float)" do
     it "converts given amount to cents" do
-      Money.from_non_string(1.2).should == Money.new(1_20)
-      Money.from_non_string(1.2).should == Money.new(1_20, "USD")
-      Money.from_non_string(1.2, "EUR").should == Money.new(1_20, "EUR")
+      Money.from_numeric(1.2).should == Money.new(1_20)
+      Money.from_numeric(1.2).should == Money.new(1_20, "USD")
+      Money.from_numeric(1.2, "EUR").should == Money.new(1_20, "EUR")
     end
 
     it "respects :subunit_to_unit currency property" do
-      Money.from_non_string(1.2, "USD").should == Money.new(1_20,  "USD")
-      Money.from_non_string(1.2, "TND").should == Money.new(1_200, "TND")
-      Money.from_non_string(1.2, "CLP").should == Money.new(1,     "CLP")
+      Money.from_numeric(1.2, "USD").should == Money.new(1_20,  "USD")
+      Money.from_numeric(1.2, "TND").should == Money.new(1_200, "TND")
+      Money.from_numeric(1.2, "CLP").should == Money.new(1,     "CLP")
     end
 
     it "accepts a currency options" do
-      m = Money.from_non_string(1.2)
+      m = Money.from_numeric(1.2)
       m.currency.should == Money.default_currency
 
-      m = Money.from_non_string(1.2, Money::Currency.wrap("EUR"))
+      m = Money.from_numeric(1.2, Money::Currency.wrap("EUR"))
       m.currency.should == Money::Currency.wrap("EUR")
 
-      m = Money.from_non_string(1.2, "EUR")
+      m = Money.from_numeric(1.2, "EUR")
       m.currency.should == Money::Currency.wrap("EUR")
     end
   end
 
-  describe ".from_non_string (BigDecimal)" do
+  describe ".from_numeric (BigDecimal)" do
     it "converts given amount to cents" do
-      Money.from_non_string(BigDecimal.new("1")).should == Money.new(1_00)
-      Money.from_non_string(BigDecimal.new("1")).should == Money.new(1_00, "USD")
-      Money.from_non_string(BigDecimal.new("1"), "EUR").should == Money.new(1_00, "EUR")
+      Money.from_numeric(BigDecimal.new("1")).should == Money.new(1_00)
+      Money.from_numeric(BigDecimal.new("1")).should == Money.new(1_00, "USD")
+      Money.from_numeric(BigDecimal.new("1"), "EUR").should == Money.new(1_00, "EUR")
     end
 
     it "respects :subunit_to_unit currency property" do
-      Money.from_non_string(BigDecimal.new("1"), "USD").should == Money.new(1_00,  "USD")
-      Money.from_non_string(BigDecimal.new("1"), "TND").should == Money.new(1_000, "TND")
-      Money.from_non_string(BigDecimal.new("1"), "CLP").should == Money.new(1,     "CLP")
+      Money.from_numeric(BigDecimal.new("1"), "USD").should == Money.new(1_00,  "USD")
+      Money.from_numeric(BigDecimal.new("1"), "TND").should == Money.new(1_000, "TND")
+      Money.from_numeric(BigDecimal.new("1"), "CLP").should == Money.new(1,     "CLP")
     end
 
     it "accepts a currency options" do
-      m = Money.from_non_string(BigDecimal.new("1"))
+      m = Money.from_numeric(BigDecimal.new("1"))
       m.currency.should == Money.default_currency
 
-      m = Money.from_non_string(BigDecimal.new("1"), Money::Currency.wrap("EUR"))
+      m = Money.from_numeric(BigDecimal.new("1"), Money::Currency.wrap("EUR"))
       m.currency.should == Money::Currency.wrap("EUR")
 
-      m = Money.from_non_string(BigDecimal.new("1"), "EUR")
+      m = Money.from_numeric(BigDecimal.new("1"), "EUR")
       m.currency.should == Money::Currency.wrap("EUR")
     end
   end

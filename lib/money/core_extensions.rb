@@ -13,10 +13,10 @@ class Numeric
   #   100.37.to_money                #=> #<Money @cents=10037>
   #   BigDecimal.new('100').to_money #=> #<Money @cents=10000>
   #
-  # @see Money.from_non_string
+  # @see Money.from_numeric
   #
   def to_money(currency = nil)
-    Money.from_non_string(self, currency || Money.default_currency)
+    Money.from_numeric(self, currency || Money.default_currency)
   end
 
 end
