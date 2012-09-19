@@ -9,6 +9,9 @@ high-precision values.
 
 - Add support for retaining high-precision versions of money values.
 - Reformat changelog to actually be Markdown.
+- Add a numeric ID for currencies that can fit in an unsigned 1-byte int, handy
+  for dimension columns in ROLAP tables.  Addded the `assign_ids` rake task to
+  help keep things up to date.
 
 ## upstream
 
