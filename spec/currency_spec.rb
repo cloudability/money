@@ -34,7 +34,7 @@ describe Money::Currency do
   describe "#initialize" do
     it "lookups data from loaded config" do
       currency = Money::Currency.new("USD")
-      currency.id.should                  == :usd
+      currency.key.should                 == :usd
       currency.priority.should            == 1
       currency.iso_code.should            == "USD"
       currency.iso_numeric.should         == "840"

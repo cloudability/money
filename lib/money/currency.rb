@@ -26,8 +26,12 @@ class Money
       #   Money::Currency.find(:eur) #=> #<Money::Currency id: eur ...>
       #   Money::Currency.find(:foo) #=> nil
       def find(id)
-        id = id.to_s.downcase.to_sym
-        new(id) if self.table[id]
+        if(id.is_a?(FixNum))
+          new(id) if self.table_by_id[id]
+        else
+          id = id.to_s.downcase.to_sym
+          new(id) if self.table[id]
+        end
       end
 
       # Wraps the object in a +Currency+ unless it's already a +Currency+
@@ -68,6 +72,10 @@ class Money
         @table ||= load_currencies
       end
 
+      def table_by_id
+        @table_by_id ||= Hash[self.table.values.map { |currency| [currency[:id], currency]}]
+      end
+
       # We need a string-based validator before creating an unbounded number of symbols.
       # http://www.randomhacks.net/articles/2007/01/20/13-ways-of-looking-at-a-ruby-symbol#11
       # https://github.com/RubyMoney/money/issues/132
@@ -76,6 +84,7 @@ class Money
       end
 
       def register(curr)
+        # TODO: What do we do about this case, and numeric IDs?  Hrm...
         key = curr[:iso_code].downcase.to_sym
         @table[key] = curr
         @stringified_keys = stringify_keys
@@ -88,11 +97,27 @@ class Money
       end
     end
 
+    # A short, numeric value we assign to currencies so they can be referenced
+    # very tersely in places where that matters.  It will not exceed 2^8-1.
+    #
+    # The +key+ below is not always unique -- several values can correspond to
+    # the same +iso_code+, some may not have an +iso_numeric+, etc.  This
+    # value will be identical for all Currency objects that have the same
+    # iso_code, regardless of the uniqueness (or lack thereof) of the +key+.
+    #
+    # You should consider very carefully what it means for currencies to be
+    # 'equivalent' when deciding which field to use!
+    #
+    # For example, compare 'JPY' and 'YEN'.
+    #
+    # @return [FixNum]
+    attr_reader :id
+
     # The symbol used to identify the currency, usually the lowercase
     # +iso_code+ attribute.
     #
     # @return [Symbol]
-    attr_reader :id
+    attr_reader :key
 
     # A numerical value you can use to sort/group the currency list.
     #
@@ -161,11 +186,17 @@ class Money
     # @example
     #   Money::Currency.new(:usd) #=> #<Money::Currency id: usd ...>
     def initialize(id)
-      id = id.to_s.downcase
-      raise(UnknownCurrency, "Unknown currency `#{id}'") unless self.class.stringified_keys.include?(id)
+      if(id.is_a?(FixNum))
+        data = self.class.table_by_id[id]
+        raise(UnknownCurrency, "Unknown currency ##{id}") unless(data)
+      else
+        id = id.to_s.downcase
+        raise(UnknownCurrency, "Unknown currency `#{id}'") unless self.class.stringified_keys.include?(id)
+        data = self.class.table[@id]
+      end
+      @id = data[:id]
+      @key = data[:key]
 
-      @id  = id.to_sym
-      data = self.class.table[@id]
       data.each_pair do |key, value|
         instance_variable_set(:"@#{key}", value)
       end
@@ -202,7 +233,7 @@ class Money
     #   c1 == c2 #=> false
     def ==(other_currency)
       self.equal?(other_currency) ||
-      self.id == other_currency.id
+      self.key == other_currency.key
     end
 
     # Compares +self+ with +other_currency+ and returns +true+ if the are the
