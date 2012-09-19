@@ -81,6 +81,7 @@ task :assign_ids do
           if(id_by_iso_code.has_key?(currency[:iso_code]))
             currency[:id] = id_by_iso_code[currency[:iso_code]]
           else
+            raise Exception.new("Uh oh, we overflowed our ID counter, which we want to guarantee doesn't exceed 2^8-1.  Sorry, can't proceed!")
             id_by_iso_code[currency[:iso_code]] = counter
             currency[:id] = counter
             counter += 1
