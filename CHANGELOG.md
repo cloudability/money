@@ -9,6 +9,11 @@ high-precision values.
 
 - Add support for retaining high-precision versions of money values.
 - Reformat changelog to actually be Markdown.
+
+## upstream
+
+- Calling Bank::Base.instance doesn't make Bank::VariableExchange.instance
+  return Bank::Base.instance anymore (semaperepelitsa)
 - Update Turkmenistan manat from TMM to TMT currency (GH-181). [Thanks @Exoth]
 - Moved ZWD Zimbabwean dollars to currency_bc.json, also added there ZWL, ZWN, and ZWR Zimbabwean dollars (GH-184).
 
@@ -22,7 +27,7 @@ high-precision values.
 
 ## 5.0.0
 
-- Minor bugfix - incorrect use of character range resulted in 
+- Minor bugfix - incorrect use of character range resulted in
   botched results for Money::Parsing#extract_cents (GH-162)
 - Money::Currency::TABLE removed. Use Money::Currency.register to add
   additional currencies (GH-143)
