@@ -26,7 +26,7 @@ class Money
       #   Money::Currency.find(:eur) #=> #<Money::Currency id: eur ...>
       #   Money::Currency.find(:foo) #=> nil
       def find(id)
-        if(id.is_a?(FixNum))
+        if(id.is_a?(Fixnum))
           new(id) if self.table_by_id[id]
         else
           id = id.to_s.downcase.to_sym
@@ -110,7 +110,7 @@ class Money
     #
     # For example, compare 'JPY' and 'YEN'.
     #
-    # @return [FixNum]
+    # @return [Fixnum]
     attr_reader :id
 
     # The symbol used to identify the currency, usually the lowercase
@@ -186,13 +186,13 @@ class Money
     # @example
     #   Money::Currency.new(:usd) #=> #<Money::Currency id: usd ...>
     def initialize(id)
-      if(id.is_a?(FixNum))
+      if(id.is_a?(Fixnum))
         data = self.class.table_by_id[id]
         raise(UnknownCurrency, "Unknown currency ##{id}") unless(data)
       else
         id = id.to_s.downcase
         raise(UnknownCurrency, "Unknown currency `#{id}'") unless self.class.stringified_keys.include?(id)
-        data = self.class.table[@id]
+        data = self.class.table[id.to_sym]
       end
       @id = data[:id]
       @key = data[:key]
@@ -270,7 +270,7 @@ class Money
     # @example
     #   Money::Currency.new(:usd) #=> #<Currency id: usd ...>
     def inspect
-      "#<#{self.class.name} id: #{id}, priority: #{priority}, symbol_first: #{symbol_first}, thousands_separator: #{thousands_separator}, html_entity: #{html_entity}, decimal_mark: #{decimal_mark}, name: #{name}, symbol: #{symbol}, subunit_to_unit: #{subunit_to_unit}, iso_code: #{iso_code}, iso_numeric: #{iso_numeric}, subunit: #{subunit}>"
+      "#<#{self.class.name} id: #{id}, key: #{key}, priority: #{priority}, symbol_first: #{symbol_first}, thousands_separator: #{thousands_separator}, html_entity: #{html_entity}, decimal_mark: #{decimal_mark}, name: #{name}, symbol: #{symbol}, subunit_to_unit: #{subunit_to_unit}, iso_code: #{iso_code}, iso_numeric: #{iso_numeric}, subunit: #{subunit}>"
     end
 
     # Returns a string representation corresponding to the upcase +id+
@@ -285,7 +285,7 @@ class Money
     #   Money::Currency.new(:usd).to_s #=> "USD"
     #   Money::Currency.new(:eur).to_s #=> "EUR"
     def to_s
-      id.to_s.upcase
+      key.to_s.upcase
     end
 
     # Conversation to +self+.
