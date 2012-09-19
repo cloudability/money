@@ -14,16 +14,16 @@ class Money
 
     class << self
 
-      # Lookup a currency with given +id+ an returns a +Currency+ instance on
-      # success, +nil+ otherwise.
+      # Lookup a currency with given +id+/+key+ an returns a +Currency+
+      # instance on success, +nil+ otherwise.
       #
-      # @param [String, Symbol, #to_s] id Used to look into +table+ and
-      # retrieve the applicable attributes.
+      # @param [String, Symbol, Fixnum, #to_s] id/key Used to look into
+      # +table+ or +table_by_id+ and retrieve the applicable attributes.
       #
       # @return [Money::Currency]
       #
       # @example
-      #   Money::Currency.find(:eur) #=> #<Money::Currency id: eur ...>
+      #   Money::Currency.find(:eur) #=> #<Money::Currency id: 45, key: eur ...>
       #   Money::Currency.find(:foo) #=> nil
       def find(id)
         if(id.is_a?(Fixnum))
@@ -45,8 +45,8 @@ class Money
       # @example
       #   c1 = Money::Currency.new(:usd)
       #   Money::Currency.wrap(nil)   #=> nil
-      #   Money::Currency.wrap(c1)    #=> #<Money::Currency id: usd ...>
-      #   Money::Currency.wrap("usd") #=> #<Money::Currency id: usd ...>
+      #   Money::Currency.wrap(c1)    #=> #<Money::Currency id: 146, key: usd ...>
+      #   Money::Currency.wrap("usd") #=> #<Money::Currency id: 146, key: usd ...>
       def wrap(object)
         if object.nil?
           nil
@@ -178,13 +178,14 @@ class Money
 
     # Create a new +Currency+ object.
     #
-    # @param [String, Symbol, #to_s] id Used to look into +table+ and retrieve
-    #  the applicable attributes.
+    # @param [String, Symbol, Fixnum, #to_s] id Used to look into +table+ or
+    #  +table_by_id+ and retrieve the applicable attributes.
     #
     # @return [Money::Currency]
     #
     # @example
-    #   Money::Currency.new(:usd) #=> #<Money::Currency id: usd ...>
+    #   Money::Currency.new(:usd) #=> #<Money::Currency id: 146, key: usd ...>
+    #   Money::Currency.new(146)  #=> #<Money::Currency id: 146, key: usd ...>
     def initialize(id)
       if(id.is_a?(Fixnum))
         data = self.class.table_by_id[id]
@@ -220,7 +221,7 @@ class Money
     end
 
     # Compares +self+ with +other_currency+ and returns +true+ if the are the
-    # same or if their +id+ attributes match.
+    # same or if their +key+ attributes match.
     #
     # @param [Money::Currency] other_currency The currency to compare to.
     #
@@ -237,7 +238,7 @@ class Money
     end
 
     # Compares +self+ with +other_currency+ and returns +true+ if the are the
-    # same or if their +id+ attributes match.
+    # same or if their +key+ attributes match.
     #
     # @param [Money::Currency] other_currency The currency to compare to.
     #
@@ -252,7 +253,7 @@ class Money
       self == other_currency
     end
 
-    # Returns a Fixnum hash value based on the +id+ attribute in order to use
+    # Returns a Fixnum hash value based on the +key+ attribute in order to use
     # functions like & (intersection), group_by, etc.
     #
     # @return [Fixnum]
@@ -260,7 +261,7 @@ class Money
     # @example
     #   Money::Currency.new(:usd).hash #=> 428936
     def hash
-      id.hash
+      key.hash
     end
 
     # Returns a human readable representation.
@@ -268,16 +269,16 @@ class Money
     # @return [String]
     #
     # @example
-    #   Money::Currency.new(:usd) #=> #<Currency id: usd ...>
+    #   Money::Currency.new(:usd) #=> #<Currency id: 146, key: usd ...>
     def inspect
       "#<#{self.class.name} id: #{id}, key: #{key}, priority: #{priority}, symbol_first: #{symbol_first}, thousands_separator: #{thousands_separator}, html_entity: #{html_entity}, decimal_mark: #{decimal_mark}, name: #{name}, symbol: #{symbol}, subunit_to_unit: #{subunit_to_unit}, iso_code: #{iso_code}, iso_numeric: #{iso_numeric}, subunit: #{subunit}>"
     end
 
-    # Returns a string representation corresponding to the upcase +id+
+    # Returns a string representation corresponding to the upcase +key+
     # attribute.
     #
     # -–
-    # DEV: id.to_s.upcase corresponds to iso_code but don't use ISO_CODE for consistency.
+    # DEV: key.to_s.upcase corresponds to iso_code but don't use ISO_CODE for consistency.
     #
     # @return [String]
     #
