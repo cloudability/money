@@ -91,7 +91,7 @@ describe Money::Currency do
   describe "#inspect" do
     it "works as documented" do
       Money::Currency.new(:usd).inspect.should ==
-          %Q{#<Money::Currency id: usd, priority: 1, symbol_first: true, thousands_separator: ,, html_entity: $, decimal_mark: ., name: United States Dollar, symbol: $, subunit_to_unit: 100, iso_code: USD, iso_numeric: 840, subunit: Cent>}
+          %Q{#<Money::Currency id: 146, key: usd, priority: 1, symbol_first: true, thousands_separator: ,, html_entity: $, decimal_mark: ., name: United States Dollar, symbol: $, subunit_to_unit: 100, iso_code: USD, iso_numeric: 840, subunit: Cent>}
     end
   end
 
