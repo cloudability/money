@@ -67,8 +67,6 @@ task :assign_ids do
 
   require 'json_builder'
 
-require 'pp'
-pp currencies
   # This is to deal with currencies that show up multiple times,
   # sometimes with a different key, and no iso numeric code.
   id_by_iso_code = {}
