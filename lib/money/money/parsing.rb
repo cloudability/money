@@ -184,7 +184,13 @@ class Money
       def from_bigdecimal(value, currency = Money.default_currency)
         currency = Money::Currency.wrap(currency)
         amount   = value * currency.subunit_to_unit
-        new(amount.round, currency)
+        result = nil
+        begin
+          result = new(amount.round, currency)
+        rescue FloatDomainError => fde
+          raise FloatDomainError, "Got NaN converting #{value} (#{value.class}) to #{currency} and then rounding it.  Converted amount was #{amount}."
+        end
+        return result
       end
 
       # Converts a Numeric value into a Money object treating the +value+
