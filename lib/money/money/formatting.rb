@@ -5,11 +5,11 @@ class Money
     if Object.const_defined?("I18n")
       def thousands_separator
         if self.class.use_i18n
-          I18n.t(
+          currency.thousands_separator || I18n.t(
             :"number.currency.format.delimiter",
             :default => I18n.t(
               :"number.format.delimiter",
-              :default => (currency.thousands_separator || ",")
+              :default => ","
             )
           )
         else
@@ -27,11 +27,11 @@ class Money
     if Object.const_defined?("I18n")
       def decimal_mark
         if self.class.use_i18n
-          I18n.t(
+          currency.decimal_mark || I18n.t(
             :"number.currency.format.separator",
             :default => I18n.t(
               :"number.format.separator",
-              :default => (currency.decimal_mark || ".")
+              :default => "."
             )
           )
         else
